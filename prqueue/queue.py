@@ -1,11 +1,5 @@
 # coding: utf-8
 from developers import models
-# for the tests
-DEV_KV = {
-    'dev1': u'hello dev1',
-    'dev2': u'hello dev2',
-    'dev3': u'hello dev3'
-}
 
 
 def get_dev_per_products():
@@ -23,11 +17,6 @@ def get_dev_per_products():
     return result
 
 
-def get_active_developers():
-    return models.Developer.filter(is_active=True, on_duty=False
-                                   ).values_list('name', 'email')
-
-
 def _send_mail(dev, msg):
     """
     sends a message throw email to developer
@@ -35,7 +24,7 @@ def _send_mail(dev, msg):
     : msg - text string
     :return:
     """
-    print "send {0} to {1}...".format(dev, msg)
+    print "send {0} to {1}...".format(msg, dev)
 
 
 def broadcast(dev_kv):
@@ -47,7 +36,3 @@ def broadcast(dev_kv):
 
     for dev, msg in dev_kv.iteritems():
         _send_mail(dev, msg)
-
-#test
-broadcast(DEV_KV)
-get_dev_per_products()
