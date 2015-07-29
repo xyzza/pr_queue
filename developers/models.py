@@ -16,9 +16,7 @@ class Developer(models.Model):
         ordering = ['name']
 
     def __unicode__(self):
-        return u"{0} ({1}) can be chosen ({2})".format(self.name,
-                                                       self.email,
-                                                       self.on_duty)
+        return u"{0} ({1})".format(self.name, self.email)
 
 
 class Product(models.Model):
@@ -28,38 +26,34 @@ class Product(models.Model):
     Chunk of ordered developers. They rotating one by one
     """
     _current = models.SmallIntegerField(u'current developers index',
-                                        default=0, editable=False)
+                                        default=0, editable=True)
     name = models.CharField(u'DeveloperQueue name', max_length=100)
     developer = models.ManyToManyField(u'Developer')
 
-    def current(self):
-        return self.developer.all()[self._current]
-
-    def append(self, dev):
-        assert self.id, u'queue must be saved before adding a developers'
-        self.developer.add(dev)
-        return self.developer.all()
-
-    def next(self):
+    def get_dev_by_offset(self, offset):
         """
-        Return index of next developer in queue
-        :return: int
+        If offset is 0 - return current developer in queue
+        If offset is 1 - return next developer in queue
+        :param offset: positive int
+        :return: Developer object
         """
-        self._current += 1
-        # TODO: optimization - cut sql query from method
-        _curr_count = self.developer.all().count()
-        if self._current == _curr_count:
-            self._current = 0
-        assert self._current < _curr_count
-        return self._current
+        assert offset >= 0
+        _index = self._current + offset
+        if _index < self.developer.count():
+            return self.developer.all()[_index]
 
-    def set_current(self, current):
+        return self.developer.all()[0]
+
+    def set_current_by_offset(self, offset):
         """
-        Set given index as current developer index
-        :param current: int
+        :param offset: int
         :return: None
         """
-        self._current = current
+        assert offset is 1
+        _new_current = self._current + offset
+        if _new_current > self.developer.count() - 1:
+            _new_current = 0
+        self._current = _new_current
         self.save()
 
     def __unicode__(self):
@@ -73,10 +67,7 @@ class ProductQueue(models.Model):
 
     name = models.CharField(u'Product queue', max_length=255)
     dev_queue = models.ManyToManyField(Product)
-
-    def all_developers(self):
-        return self.dev_queue.all().values_list(
-            'developer', flat=True).distinct()
+    receivers = models.ManyToManyField(Developer)
 
     def __unicode__(self):
         return self.name
