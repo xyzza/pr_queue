@@ -1,5 +1,5 @@
 # coding: utf-8
-from prqueue.queue import process_all
+from prqueue.queue import send_all_assignments
 
 # test the run
-process_all()
+send_all_assignments()

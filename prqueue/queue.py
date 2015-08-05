@@ -1,8 +1,8 @@
 # coding: utf-8
-from developers.models import ProductQueue, Developer
+from developers.models import ProductQueue
 
 
-def get_all_jobs():
+def get_products_queues():
     return ProductQueue.objects.all()
 
 
@@ -28,26 +28,26 @@ def increase_duty_counter(job):
 
 
 def apply_assignment(dev, assignment):
+    # TODO: write an email spread function
     print u"Developer == {} == \nGet the assignment {}".format(dev, assignment)
 
 
-def process_job(job):
+def process_product(product_queue):
     """
-    Process current job
-    :param job:
-    :return:
+    :param product_queue: ProductQueue object
     """
 
-    for dev in job.receivers.all():
-        assignment = get_dev_assignments(dev, job)
+    for dev in product_queue.receivers.all():
+        assignment = get_dev_assignments(dev, product_queue)
         apply_assignment(dev, assignment)
-    increase_duty_counter(job)
+    increase_duty_counter(product_queue)
 
 
-def process_all():
+def send_all_assignments():
     """
-    main task, thaw will be executed async
+    Main entry point.
+    Initiate process of assigning and sending messages.
     """
-    all_jobs = get_all_jobs()
-    for job in all_jobs:
-        process_job(job)
+    all_product_queues = get_products_queues()
+    for product_queue in all_product_queues:
+        process_product(product_queue)

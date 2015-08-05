@@ -7,13 +7,12 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('developers', '0005_auto_20150426_1616'),
+        ('developers', '0001_initial'),
     ]
 
     operations = [
-        migrations.AddField(
+        migrations.RemoveField(
             model_name='developer',
-            name='_on_duty',
-            field=models.BooleanField(default=False, verbose_name='Developer is busy', editable=False),
+            name='on_duty',
         ),
     ]

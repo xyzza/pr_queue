@@ -1,33 +1,52 @@
-#coding: utf-8
+# coding: utf-8
 from django.db import models
+
+
+class ActiveDeveloperManager(models.Manager):
+    """
+    Exclude all non active developers from all query
+    """
+    def get_queryset(self):
+        return super(ActiveDeveloperManager, self).get_queryset().filter(
+            is_active=True)
 
 
 class Developer(models.Model):
     """
     Represent developer, who manage pull requests
     """
+    # we need only active developers
+    objects = ActiveDeveloperManager()
+
     name = models.CharField(u"dev's name", max_length=150)
     email = models.EmailField(u"dev's email", max_length=150)
     is_active = models.BooleanField(u'Is active')
-    on_duty = models.BooleanField(u'Developer can be chosen to reviewers',
-                                  default=False, editable=False)
 
     class Meta:
+        # Ordering is matter for get_by_offset functions
+        # you shouldn't change it
         ordering = ['name']
 
     def __unicode__(self):
-        return u"{0} ({1})".format(self.name, self.email)
+        return u"{} ({}) active:{}".format(self.name, self.email,
+                                           self.is_active)
 
 
-class Product(models.Model):
+class AllDevelopers(Developer):
+
+    all_objects = models.Manager()
+
+    class Meta:
+        proxy = True
+
+class DevelopersQueue(models.Model):
     """
-    # TODO: Rename class to "DeveloperQueue"
     Group of developers united by some reason
     Chunk of ordered developers. They rotating one by one
     """
     _current = models.SmallIntegerField(u'current developers index',
-                                        default=0, editable=True)
-    name = models.CharField(u'DeveloperQueue name', max_length=100)
+                                        default=0, editable=False)
+    name = models.CharField(u'DevelopersQueue name', max_length=100)
     developer = models.ManyToManyField(u'Developer')
 
     def get_dev_by_offset(self, offset):
@@ -66,7 +85,7 @@ class ProductQueue(models.Model):
     """
 
     name = models.CharField(u'Product queue', max_length=255)
-    dev_queue = models.ManyToManyField(Product)
+    dev_queue = models.ManyToManyField(DevelopersQueue)
     receivers = models.ManyToManyField(Developer)
 
     def __unicode__(self):
