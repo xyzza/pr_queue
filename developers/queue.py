@@ -1,5 +1,6 @@
 # coding: utf-8
 from .models import ProductQueue
+from .utils import send_mail
 
 
 def get_products_queues():
@@ -15,11 +16,9 @@ def get_dev_assignments(dev, job):
             # recipient equals to duty_officer, try to get next
             duty_officer = dev_q.get_dev_by_offset(1)
             # if he the only one in that queue we will take him
-        assigned_officers.append(u"developer {} from queue {}".format(
-            duty_officer.__unicode__(),
-            dev_q.name
-        ))
-    return u''.join(assigned_officers)
+        assigned_officers.append(u"{}".format(duty_officer.full_name))
+    return u"Hello, {}!\n It's [{}] on duty in [{}]".format(
+        dev.full_name, u' '.join(assigned_officers), job.name)
 
 
 def increase_duty_counter(job):
@@ -29,7 +28,8 @@ def increase_duty_counter(job):
 
 def apply_assignment(dev, assignment):
     # TODO: write an email spread function
-    print u"Developer == {} == \nGet the assignment {}".format(dev, assignment)
+    send_mail(dev.email, assignment)
+    # print u"receiver {}\n message: {}".format(dev.email, assignment)
 
 
 def process_product(product_queue):
