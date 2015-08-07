@@ -1,5 +1,5 @@
 # coding: utf-8
-from developers.models import ProductQueue
+from .models import ProductQueue
 
 
 def get_products_queues():
