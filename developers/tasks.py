@@ -18,6 +18,7 @@ _schedule = defaultdict(hour=5, minute=42, day_of_week=[1, 2, 3, 4, 5])
 if settings.DEBUG:
     _schedule = defaultdict(minute='*/2')
 
+
 @periodic_task(
     run_every=(crontab(**_schedule)),
     name='apply_assignments',
