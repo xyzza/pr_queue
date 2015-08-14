@@ -26,12 +26,6 @@ def increase_duty_counter(job):
         dev_q.set_current_by_offset(1)
 
 
-def apply_assignment(dev, assignment):
-    # TODO: write an email spread function
-    send_mail(dev.email, assignment)
-    # print u"receiver {}\n message: {}".format(dev.email, assignment)
-
-
 def process_product(product_queue):
     """
     :param product_queue: ProductQueue object
@@ -39,7 +33,7 @@ def process_product(product_queue):
 
     for dev in product_queue.receivers.all():
         assignment = get_dev_assignments(dev, product_queue)
-        apply_assignment(dev, assignment)
+        send_mail(dev.email, assignment)
     increase_duty_counter(product_queue)
 
 
