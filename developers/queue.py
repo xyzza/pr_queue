@@ -33,7 +33,7 @@ def process_product(product_queue):
 
     for dev in product_queue.receivers.all():
         assignment = get_dev_assignments(dev, product_queue)
-        send_mail(dev.email, assignment)
+        send_mail(dev.email, assignment, product_queue.name)
     increase_duty_counter(product_queue)
 
 
