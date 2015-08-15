@@ -12,7 +12,8 @@ DJANGO_WSGI_MODULE=prqueue.wsgi
 echo "Starting $NAME as `whoami`"
 
 # Activate the virtual environment
-workon pull_requests
+cd $DJANGODIR
+source ../bin/activate
 export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 export PYTHONPATH=$DJANGODIR:$PYTHONPATH
 
