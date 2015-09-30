@@ -3,25 +3,27 @@ from rest_framework import serializers
 from developers.models import AllDevelopers, ProductQueue, DevelopersQueue
 
 
-class DeveloperSerializer(serializers.HyperlinkedModelSerializer):
+class DeveloperSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AllDevelopers
-        fields = ('name', 'email', 'is_active', 'pk')
+        fields = ('pk', 'name', 'email', 'is_active')
 
 
-class DevelopersQueueSerializer(serializers.HyperlinkedModelSerializer):
+class DevelopersQueueSerializer(serializers.ModelSerializer):
+
+    developer = DeveloperSerializer(many=True)
 
     class Meta:
         model = DevelopersQueue
-        fields = ('name',)
+        fields = ('pk', 'name', 'developer')
 
 
-class ProductQueueSerializer(serializers.HyperlinkedModelSerializer):
+class ProductQueueSerializer(serializers.ModelSerializer):
 
-    dev_queue = serializers.HyperlinkedRelatedField(
-        view_name='product-dev-queue', format='html', many=True, read_only=True)
+    dev_queue = DevelopersQueueSerializer(many=True)
+    receivers = DeveloperSerializer(many=True)
 
     class Meta:
         model = ProductQueue
-        fields = ('name', 'dev_queue', 'receivers')
+        fields = ('pk', 'name', 'dev_queue', 'receivers')
