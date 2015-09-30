@@ -1,2 +1,2 @@
 # coding: utf-8
-from .router import router
+from .urls import urlpatterns as rest_urls

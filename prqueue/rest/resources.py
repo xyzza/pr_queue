@@ -12,18 +12,13 @@ class DeveloperViewSet(viewsets.ModelViewSet):
     serializer_class = DeveloperSerializer
 
 
-class ProductQueueViewSet(viewsets.ModelViewSet):
-
-    queryset = ProductQueue.objects.all()
-    serializer_class = ProductQueueSerializer
-
-
 class DevelopersQueueViewSet(viewsets.ModelViewSet):
 
     queryset = DevelopersQueue.objects.all()
     serializer_class = DevelopersQueueSerializer
 
 
-product_dev_queue = DevelopersQueueViewSet.as_view({
-    'get': 'list',
-})
+class ProductQueueViewSet(viewsets.ModelViewSet):
+
+    queryset = ProductQueue.objects.all()
+    serializer_class = ProductQueueSerializer
