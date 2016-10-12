@@ -1,30 +1,32 @@
 #!/bin/bash
 
-NAME="prqueue"
-DJANGODIR=/var/www/pull_requests/prqueue
-SOCKFILE=/var/www/pull_requests/gunicorn/sock/gunicorn.sock
-USER=www-data
-GROUP=www-data
+NAME=prqueue
+VENVDIR=/var/www/.virtualenvs/pull_requests/bin/
+PROJECTDIR=/var/www/pull_requests/prqueue/
+SOCKFILE=/var/www/pull_requests/run/gunicorn.sock
+USER=edu-admin
+GROUP=edu-admin
 NUM_WORKERS=3
 DJANGO_SETTINGS_MODULE=prqueue.settings
 DJANGO_WSGI_MODULE=prqueue.wsgi
 
 echo "Starting $NAME as `whoami`"
 
-# Activate the virtual environment
-cd $DJANGODIR
-source ../bin/activate
-export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
-export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+$VENVDIR/activate
+
+#export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+#export PYTHONPATH=$PROJECTDIR:$PYTHONPATH
 
 # Create the run directory if it doesn't exist
 RUNDIR=$(dirname $SOCKFILE)
 test -d $RUNDIR || mkdir -p $RUNDIR
 
-exec ../bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
+cd $PROJECTDIR
+exec $VENVDIR/gunicorn ${DJANGO_WSGI_MODULE}:application \
+  --env DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE \
   --name $NAME \
   --workers $NUM_WORKERS \
   --user=$USER --group=$GROUP \
   --bind=unix:$SOCKFILE \
-  --log-level=debug \
+  --log-level=INFO \
   --log-file=-
