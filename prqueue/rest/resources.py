@@ -1,7 +1,7 @@
 # coding: utf-8
 from rest_framework import viewsets
 # app imports
-from developers.models import AllDevelopers, ProductQueue, DevelopersQueue
+from prqueue.developers.models import AllDevelopers, ProductQueue, DevelopersQueue
 from .serializers import (DeveloperSerializer, ProductQueueSerializer,
                           DevelopersQueueSerializer)
 

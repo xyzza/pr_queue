@@ -4,7 +4,7 @@ from django.db import models
 
 class ActiveDeveloperManager(models.Manager):
     """
-    Exclude all non active developers from all query
+    Exclude all not active developers from all queries
     """
     def get_queryset(self):
         return super(ActiveDeveloperManager, self).get_queryset().filter(
@@ -13,9 +13,9 @@ class ActiveDeveloperManager(models.Manager):
 
 class Developer(models.Model):
     """
-    Represent developer, who manage pull requests
+    Represent developer, who manage pull requests.
+    Returns only 'active' developers
     """
-    # we need only active developers
     objects = ActiveDeveloperManager()
 
     name = models.CharField(u"dev's name", max_length=150)
@@ -23,20 +23,22 @@ class Developer(models.Model):
     is_active = models.BooleanField(u'Is active')
 
     class Meta:
-        # Ordering is matter for get_by_offset functions
-        # you shouldn't change it
+        # Ordering is important for get_by_offset functions
+        # you shouldn't change it!
         ordering = ['name']
 
     @property
     def full_name(self):
-        return u"{} ({})".format(self.name, self.email)
+        return u"{0} ({1})".format(self.name, self.email)
 
     def __unicode__(self):
-        return u"{} active:{}".format(self.full_name, self.is_active)
+        return u"{0} active:{1}".format(self.full_name, self.is_active)
 
 
 class AllDevelopers(Developer):
-
+    """
+    Return all developers, not only active
+    """
     all_objects = models.Manager()
 
     class Meta:
@@ -87,7 +89,6 @@ class ProductQueue(models.Model):
     """
     Group of DeveloperQueue
     """
-
     name = models.CharField(u'Product queue', max_length=255)
     dev_queue = models.ManyToManyField(DevelopersQueue)
     receivers = models.ManyToManyField(Developer)

@@ -2,12 +2,11 @@
 from collections import defaultdict
 
 from celery.utils.log import get_task_logger
-from celery.task.schedules import crontab
-from celery.decorators import periodic_task
-
 from django.conf import settings
 
-from developers.queue import send_all_assignments
+from celery.task.schedules import crontab
+from celery.decorators import periodic_task
+from .queue import send_assignments
 
 
 logger = get_task_logger(__name__)
@@ -26,4 +25,4 @@ if settings.DEBUG:
 )
 def apply_assignments():
     logger.info("Sending all assignments")
-    send_all_assignments()
+    send_assignments()

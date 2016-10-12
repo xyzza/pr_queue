@@ -3,11 +3,7 @@ from .models import ProductQueue
 from .utils import send_mail
 
 
-def get_products_queues():
-    return ProductQueue.objects.all()
-
-
-def get_dev_assignments(dev, job):
+def _get_dev_assignments(dev, job):
     assigned_officers = []
     for dev_q in job.dev_queue.all():
         # try to get current duty officer from the developers queue
@@ -21,27 +17,29 @@ def get_dev_assignments(dev, job):
         dev.full_name, u' '.join(assigned_officers), job.name)
 
 
-def increase_duty_counter(job):
+def _increase_duty_counter(job):
     for dev_q in job.dev_queue.all():
         dev_q.set_current_by_offset(1)
 
 
-def process_product(product_queue):
+def _process_product(product_queue):
     """
     :param product_queue: ProductQueue object
     """
-
     for dev in product_queue.receivers.all():
-        assignment = get_dev_assignments(dev, product_queue)
+        assignment = _get_dev_assignments(dev, product_queue)
         send_mail(dev.email, assignment, product_queue.name)
-    increase_duty_counter(product_queue)
+    _increase_duty_counter(product_queue)
 
 
-def send_all_assignments():
+def send_assignments(product_ids=None):
     """
     Main entry point.
-    Initiate process of assigning and sending messages.
+    Send assignments for all products or only for chosen products
+    :param product_ids: tuple of product ids - optional
     """
-    all_product_queues = get_products_queues()
-    for product_queue in all_product_queues:
-        process_product(product_queue)
+    product_queues = ProductQueue.objects.all()
+    if product_ids:
+        product_queues = product_queues.filter(pk__in=product_ids)
+    for product_queue in product_queues:
+        _process_product(product_queue)

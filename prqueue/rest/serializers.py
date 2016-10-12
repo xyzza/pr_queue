@@ -1,6 +1,7 @@
 # coding: utf-8
 from rest_framework import serializers
-from developers.models import AllDevelopers, ProductQueue, DevelopersQueue
+
+from prqueue.developers.models import AllDevelopers, ProductQueue, DevelopersQueue
 
 
 class DeveloperSerializer(serializers.ModelSerializer):
