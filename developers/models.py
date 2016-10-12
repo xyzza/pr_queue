@@ -27,9 +27,12 @@ class Developer(models.Model):
         # you shouldn't change it
         ordering = ['name']
 
+    @property
+    def full_name(self):
+        return u"{} ({})".format(self.name, self.email)
+
     def __unicode__(self):
-        return u"{} ({}) active:{}".format(self.name, self.email,
-                                           self.is_active)
+        return u"{} active:{}".format(self.full_name, self.is_active)
 
 
 class AllDevelopers(Developer):
@@ -38,6 +41,7 @@ class AllDevelopers(Developer):
 
     class Meta:
         proxy = True
+
 
 class DevelopersQueue(models.Model):
     """
