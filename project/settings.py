@@ -23,10 +23,10 @@ INSTALLED_APPS = (
 
     # system
     'rest_framework',
-    'project.rest',
 
     # domain
     'developers',
+    'rest',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -90,9 +90,19 @@ EMAIL_CONFIG = env.email_url(
     'EMAIL_URL', default='consolemail://user@:password@localhost:25')
 
 vars().update(EMAIL_CONFIG)
-# MAILPROCESSOR_LOGIN = ''
-# MAILPROCESSOR_PASSWORD = ''
-# MAILPROCESSOR_SMTP_HOST = ''
-# MAILPROCESSOR_SUBJECT =
-# MAILPROCESSOR_FROM = ''
-# MAILPROCESSOR_RECEIVER_DEBUG = ''
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+

@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.conf.urls import include, url
 from django.contrib import admin
-from .rest import rest_urls
+from rest.urls import urlpatterns as rest_urls
 
 
 urlpatterns = [

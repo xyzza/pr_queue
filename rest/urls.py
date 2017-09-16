@@ -12,5 +12,5 @@ router.register(r'product', ProductQueueViewSet)
 
 
 urlpatterns = ([
-    url(r'^', include(router.urls)),
+    url(r'^api/v0/', include(router.urls)),
 ])
