@@ -21,7 +21,7 @@ INSTALLED_APPS = (
 
     # system
     'rest_framework',
-    'prqueue.rest',
+    'project.rest',
 
     # domain
     'developers',
@@ -38,7 +38,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'prqueue.urls'
+ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
     {
@@ -56,7 +56,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'prqueue.wsgi.application'
+WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {'default': env.db()}
 
