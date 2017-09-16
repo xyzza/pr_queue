@@ -1,4 +1,4 @@
-# coding: utf-8
+from __future__ import unicode_literals
 from collections import defaultdict
 
 from celery.utils.log import get_task_logger

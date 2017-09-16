@@ -1,4 +1,4 @@
-# coding: utf-8
+from __future__ import unicode_literals
 from rest_framework import viewsets
 # app imports
 from developers.models import AllDevelopers, ProductQueue, DevelopersQueue

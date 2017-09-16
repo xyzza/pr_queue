@@ -1,4 +1,4 @@
-# coding: utf-8
+from __future__ import unicode_literals
 from rest_framework import serializers
 from developers.models import AllDevelopers, ProductQueue, DevelopersQueue
 

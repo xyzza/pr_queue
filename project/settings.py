@@ -3,12 +3,12 @@ import environ
 
 env = environ.Env()
 # read settings from .env file
-environ.Env.read_env()
+root = environ.Path(__file__) - 2
+BASE_DIR = root()
+environ.Env.read_env(root('.env'))
 
 DEBUG = env('DEBUG')
 
-root = environ.Path(__file__) - 2
-BASE_DIR = root()
 SECRET_KEY = env('SECRET_KEY')
 
 ALLOWED_HOSTS = []

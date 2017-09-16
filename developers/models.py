@@ -1,5 +1,6 @@
-# coding: utf-8
+from __future__ import unicode_literals
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 
 
 class ActiveDeveloperManager(models.Manager):
@@ -11,6 +12,7 @@ class ActiveDeveloperManager(models.Manager):
             is_active=True)
 
 
+@python_2_unicode_compatible
 class Developer(models.Model):
     """
     Represent developer, who manage pull requests
@@ -18,9 +20,9 @@ class Developer(models.Model):
     # we need only active developers
     objects = ActiveDeveloperManager()
 
-    name = models.CharField(u"dev's name", max_length=150)
-    email = models.EmailField(u"dev's email", max_length=150)
-    is_active = models.BooleanField(u'Is active')
+    name = models.CharField("dev's name", max_length=150)
+    email = models.EmailField("dev's email", max_length=150)
+    is_active = models.BooleanField('Is active')
 
     class Meta:
         # Ordering is matter for get_by_offset functions
@@ -29,10 +31,10 @@ class Developer(models.Model):
 
     @property
     def full_name(self):
-        return u"{} ({})".format(self.name, self.email)
+        return "{} ({})".format(self.name, self.email)
 
-    def __unicode__(self):
-        return u"{} active:{}".format(self.full_name, self.is_active)
+    def __str__(self):
+        return "{} active:{}".format(self.full_name, self.is_active)
 
 
 class AllDevelopers(Developer):
@@ -43,15 +45,16 @@ class AllDevelopers(Developer):
         proxy = True
 
 
+@python_2_unicode_compatible
 class DevelopersQueue(models.Model):
     """
     Group of developers united by some reason
     Chunk of ordered developers. They rotating one by one
     """
-    _current = models.SmallIntegerField(u'current developers index',
+    _current = models.SmallIntegerField('current developers index',
                                         default=0, editable=False)
-    name = models.CharField(u'DevelopersQueue name', max_length=100)
-    developer = models.ManyToManyField(u'Developer')
+    name = models.CharField('DevelopersQueue name', max_length=100)
+    developer = models.ManyToManyField('Developer')
 
     def get_dev_by_offset(self, offset):
         """
@@ -79,18 +82,19 @@ class DevelopersQueue(models.Model):
         self._current = _new_current
         self.save()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class ProductQueue(models.Model):
     """
     Group of DeveloperQueue
     """
 
-    name = models.CharField(u'Product queue', max_length=255)
+    name = models.CharField('Product queue', max_length=255)
     dev_queue = models.ManyToManyField(DevelopersQueue)
     receivers = models.ManyToManyField(Developer)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
