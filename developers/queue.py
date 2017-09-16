@@ -1,6 +1,6 @@
 # coding: utf-8
+from django.core.mail import send_mail
 from .models import ProductQueue
-from .utils import send_mail
 
 
 def get_products_queues():
@@ -33,7 +33,13 @@ def process_product(product_queue):
 
     for dev in product_queue.receivers.all():
         assignment = get_dev_assignments(dev, product_queue)
-        send_mail(dev.email, assignment, product_queue.name)
+
+        send_mail(
+            subject=product_queue.name,
+            message=assignment,
+            from_email='pull requests',
+            recipient_list=[dev.email,])
+
     increase_duty_counter(product_queue)
 
 
