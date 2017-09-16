@@ -1,14 +1,16 @@
-import os
 import environ
 
 
 env = environ.Env()
-environ.Env.read_env() # read settings from .env file
+# read settings from .env file
+environ.Env.read_env()
 
-root = environ.Path(__file__)-2
+DEBUG = env('DEBUG')
+
+root = environ.Path(__file__) - 2
 BASE_DIR = root()
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = env('DEBUG')
+
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
@@ -67,7 +69,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR + STATIC_URL
+STATIC_ROOT = root('static')
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -91,6 +93,6 @@ vars().update(EMAIL_CONFIG)
 # MAILPROCESSOR_LOGIN = ''
 # MAILPROCESSOR_PASSWORD = ''
 # MAILPROCESSOR_SMTP_HOST = ''
-# MAILPROCESSOR_SUBJECT = '[Hero of a day] Who is on duty today?'
+# MAILPROCESSOR_SUBJECT =
 # MAILPROCESSOR_FROM = ''
 # MAILPROCESSOR_RECEIVER_DEBUG = ''

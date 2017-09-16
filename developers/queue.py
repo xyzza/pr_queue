@@ -35,7 +35,8 @@ def process_product(product_queue):
         assignment = get_dev_assignments(dev, product_queue)
 
         send_mail(
-            subject=product_queue.name,
+            subject='{}{}'.format(product_queue.name,
+                                  '[Hero of a day] Who is on duty today?'),
             message=assignment,
             from_email='pull requests',
             recipient_list=[dev.email,])
